@@ -23,7 +23,6 @@ const Command = () => {
     const data: Record<string, any> = {
       content: values.content,
       threadify: values.threadify,
-      share: values.share_options == "share-now",
     };
 
     if (values.share_options == "schedule-share") {
@@ -34,14 +33,8 @@ const Command = () => {
       data["schedule-date"] = "next-free-slot";
     }
 
-    if (values.share_options == "share-now") {
-      const date = new Date();
-      const milliseconds = 10 * 1000;
-      data["schedule-date"] = new Date(date.getTime() + milliseconds).toISOString();
-    }
-
     try {
-      const response = await got
+      await got
         .post("https://api.typefully.com/v1/drafts/", {
           json: data,
           headers: {
@@ -49,10 +42,6 @@ const Command = () => {
           },
         })
         .json();
-
-      console.log(response);
-
-      // TODO Handle errors here too.
     } catch (error) {
       showToast({ title: "Whoops!", message: "Something went wrong while submitting to Typefully." });
     }
@@ -60,7 +49,6 @@ const Command = () => {
     showToast({ title: "Submitted to Typefully", message: "Your draft made it to Typefully! 🥳" });
   }
 
-  // TODO Handle form validation with appropriate errors
   return (
     <Form
       actions={
@@ -81,7 +69,6 @@ const Command = () => {
         <Form.Dropdown.Item value="save-as-draft" title="Save as draft" />
         <Form.Dropdown.Item value="schedule-share" title="Schedule" />
         <Form.Dropdown.Item value="schedule-next-free-slot" title="Schedule to next free slot" />
-        <Form.Dropdown.Item value="share-now" title="Share now" />
       </Form.Dropdown>
       <Form.Checkbox
         id="threadify"
