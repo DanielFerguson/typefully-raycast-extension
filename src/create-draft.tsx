@@ -2,9 +2,7 @@ import { Form, ActionPanel, Action, showToast, getPreferenceValues } from "@rayc
 import { useState } from "react";
 import got from "got";
 
-type Preferences = {
-  token: string;
-};
+import Preferences from "./interfaces/preferences";
 
 type Values = {
   content: string;
